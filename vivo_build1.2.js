@@ -1,4 +1,3 @@
-
 // 1. 检查并申请悬浮窗权限（阻塞等待）
 importClass(android.provider.Settings);
 if (!Settings.canDrawOverlays(context)) {
@@ -86,14 +85,19 @@ for (var i = 0; i < arr.length; i++) {
 
 }
 app.launch("com.vivo.club");
-sleep(3000)
-var arr = id("textPicVideoTotalView").find()
-for (let i = 0; i < 3; i++) {
+sleep(4000);
+var arr = id("textPicVideoTotalView").find();
+while (arr.length <= 4) {
+    console.log("文章数量不足，2s后重新获取")
+    sleep(2000)
+}
+for (let i = 0; i < 5; i++) {
     sleep(2000)
     var el = arr[i];
     arr[i].click()
     sleep(1500)
-    if (i == 2) {
+    id("btn_praise").findOne().click()
+    if (i == 4) {
         id("tv_reply").findOne().click()
         sleep(2000)
         id("edt_reply").findOne().setText("签到")
@@ -104,26 +108,31 @@ for (let i = 0; i < 3; i++) {
     }
     back()
 }
-console.log('社区阅读true');
-id("mainBottTabVCoinView").findOne().click()
-sleep(1500)
-id("everySignDaySignBtn").findOne().click()
-sleep(1500)
-desc("点击抽奖本次免费").findOne().click()
-console.log(社区true);
-app.launch("com.max.xiaoheihe")
-sleep(3000)
-console.log("小黑盒true")
 
-app.launch("com.tencent.qt.sns")
-console.log("cfTrue")
+console.log('社区阅读true');
+id("mainBottTabVCoinView").findOne().click();
+sleep(1500);
+id("everySignDaySignBtn").findOne().click();
+sleep(1500);
+var btn = desc("点击抽奖本次免费").exists();
+if (btn) {
+    desc("点击抽奖本次免费").findOne().click()
+}
+
+console.log('社区true');
+app.launch("com.max.xiaoheihe");
+sleep(3000);
+console.log("小黑盒true");
+
+app.launch("com.tencent.qt.sns");
+console.log("cfTrue");
 console.log("签到完成");
-exit()
+exit();
 //范围点击
 function elementFun(left, top, right, bottom) {
     var element = bounds(left, top, right, bottom).findOne();
     if (element) {
-        element.click();  // 如果控件本身可点击
+        element.click(); // 如果控件本身可点击
         // 如果不可点击，用下面的坐标点击
         // click(element.bounds().centerX(), element.bounds().centerY());
     } else {
