@@ -42,6 +42,47 @@ desc('我的').findOne().click()
 sleep(1000)
 id("ll_jifen").click()
 sleep(2000)
+
+//领积分
+var btnarr = className("android.widget.Button").find()
+for (var i = 0; i < btnarr.length; i++) {
+    if (btnarr[i].text() == "" && btnarr[i].indexInParent() == 2) {
+        btnarr[i].click()
+    }
+}
+sleep(500)
+var arr = text("领取积分").find()
+for (var i = 0; i < arr.length; i++) {
+    text("领取积分").findOne().click()
+}
+//砸金蛋
+desc("第1张轮播图片，可跳转").findOne(3000).click()
+console.log(desc("第1张轮播图片，可跳转").exists());
+sleep(3000)
+var node = textMatches(/剩余\d+次抽奖机会/).findOne(2000)
+if (node) {
+    var num = parseInt(node.text().match(/\d+/)[0])
+    if (num > 0) {
+        var egg = className("android.widget.TextView").find()
+        for (let i = 0; i < num; i++) {
+            for (var i = 0; i < egg.length; i++) {
+                var e = egg[i]
+                if (e.clickable() && e.indexInParent() == 1) {
+                    console.log(e, i)
+                    e.click()
+                    sleep(1000)
+                    text("我知道了").findOne().click()
+                    break
+                }
+            }
+
+        }
+        back()
+    }
+    back()
+}
+
+
 text('积分商城').findOne().click()
 sleep(1500)
 text("赚积分").findOne().click()
@@ -112,8 +153,10 @@ for (let i = 0; i < 5; i++) {
 console.log('社区阅读true');
 id("mainBottTabVCoinView").findOne().click();
 sleep(1500);
-id("everySignDaySignBtn").findOne().click();
-sleep(1500);
+if (id("everySignDaySignBtn").exists()) {
+    id("everySignDaySignBtn").findOne().click();
+    sleep(1500);
+}
 var btn = desc("点击抽奖本次免费").exists();
 if (btn) {
     desc("点击抽奖本次免费").findOne().click()
