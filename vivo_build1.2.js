@@ -20,6 +20,13 @@ if (auto.service == null) {
 
 // 3. 开始执行脚本
 console.show()
+console.log('社区true');
+app.launch("com.max.xiaoheihe");
+sleep(3000);
+console.log("小黑盒true");
+app.launch("com.tencent.qt.sns");
+console.log("cfTrue");
+sleep(3000);
 app.launch('com.vivo.space')
 console.log('如果超过5s没有动作，关闭vivo官网和脚本后台后再重新运行脚本')
 console.log('按音量上键停止脚本');
@@ -57,28 +64,29 @@ for (var i = 0; i < arr.length; i++) {
 }
 //砸金蛋
 desc("第1张轮播图片，可跳转").findOne(3000).click()
-console.log(desc("第1张轮播图片，可跳转").exists());
 sleep(3000)
 var node = textMatches(/剩余\d+次抽奖机会/).findOne(2000)
-if (node) {
-    var num = parseInt(node.text().match(/\d+/)[0])
-    if (num > 0) {
-        var egg = className("android.widget.TextView").find()
-        for (let i = 0; i < num; i++) {
-            for (var i = 0; i < egg.length; i++) {
-                var e = egg[i]
-                if (e.clickable() && e.indexInParent() == 1) {
-                    console.log(e, i)
-                    e.click()
-                    sleep(1000)
-                    text("我知道了").findOne().click()
-                    break
-                }
-            }
-
+var num = parseInt(node.text().match(/\d+/)[0])
+if (num) {
+    var egg = className("android.widget.TextView").find()
+    var eggNode = null
+    var eggNum = 0
+    for (var i = 0; i < egg.length; i++) {
+        var e = egg[i]
+        if (e.clickable() && e.indexInParent() == 1) {
+            eggNum = i
+            eggNode = e
+            break
         }
-        back()
     }
+    for (let i = 0; i < 5; i++) {
+        eggNode.click()
+        sleep(1000)
+        text("我知道了").findOne().click()
+    }
+    sleep(1000)
+    back()
+} else {
     back()
 }
 
@@ -162,13 +170,7 @@ if (btn) {
     desc("点击抽奖本次免费").findOne().click()
 }
 
-console.log('社区true');
-app.launch("com.max.xiaoheihe");
-sleep(3000);
-console.log("小黑盒true");
 
-app.launch("com.tencent.qt.sns");
-console.log("cfTrue");
 console.log("签到完成");
 exit();
 //范围点击
