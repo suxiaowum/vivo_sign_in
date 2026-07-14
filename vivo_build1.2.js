@@ -20,7 +20,6 @@ if (auto.service == null) {
 
 // 3. 开始执行脚本
 console.show()
-console.log('社区true');
 app.launch("com.max.xiaoheihe");
 sleep(3000);
 console.log("小黑盒true");
@@ -176,6 +175,7 @@ if (btn) {
 
 
 console.log("签到完成");
+console.log('社区true');
 exit();
 //范围点击
 function elementFun(left, top, right, bottom) {
