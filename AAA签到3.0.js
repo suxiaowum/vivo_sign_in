@@ -47,7 +47,7 @@ const CONFIG = {
     },
 
     TABBER: {
-        CART_DESC: '购物车',
+        CART_DESC: '选购',
         READ_DESC: '社区',
         VIP_DESC: '会员',
         MY_DESC: '我的',
@@ -102,6 +102,9 @@ function startApp(packageName, sleepTime) {
     app.launch(packageName);
 
     // 倒计时显示
+    backTime(sleepTime);
+}
+function backTime(sleepTime) {
     let remaining = Math.ceil(sleepTime / 1000);
     console.log("等待 " + remaining + " 秒...");
     while (remaining > 0) {
@@ -162,7 +165,7 @@ function getTextIntegral(textArr) {
     let arr = textArr
     for (let i = 0; i < arr.length; i++) {
         let isOk = text(arr[i]).findOne().click();
-        sleep(3000);
+        backTime(3000);
         switch (arr[i]) {
             case '游戏中心':
                 back();
@@ -271,7 +274,7 @@ function communityRead() {
     desc(CONFIG.TABBER.READ_DESC).findOne().click();
     sleep(CONFIG.DELAY._TWO);
     const communityItems = id(CONFIG.READ.LIST_ID).findOne().children();
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
         communityItems[i].click();
         sleep(CONFIG.DELAY._TWO);
         back();
@@ -338,28 +341,29 @@ function list() {
             get_text_arr.push(all_text_arr[i]);
         }
     }
-    console.log(get_text_arr);
+    // console.log(get_text_arr);
     getTextIntegral(get_text_arr);
 
 }
 
 /** ==================== vivo 社区 ==================== */
 function communityVivo() {
+    console.log('社区')
     app.launch("com.vivo.club");
-    sleep(CONFIG.DELAY._FOUR);
+    backTime(CONFIG.DELAY._FOUR)
     var arr = id("textPicVideoTotalView").find();
     while (arr.length <= 4) {
-        console.log("文章数量不足，2s后重新获取");
-        sleep(2000);
+        console.log("文章数量不足，4s后重新获取");
+        backTime(CONFIG.DELAY._FOUR);
+        arr = id("textPicVideoTotalView").find();
     }
     for (let i = 0; i < 5; i++) {
-        sleep(CONFIG.DELAY._TWO);
+        // sleep(CONFIG.DELAY._TWO);
         var el = arr[i];
         arr[i].click();
         sleep(CONFIG.DELAY._TWO);
-
         id("btn_praise").findOne().click();
-
+        sleep(CONFIG.DELAY._TWO);
         if (i == 4) {
             id("tv_reply").findOne().click();
             sleep(CONFIG.DELAY._TWO);
@@ -369,6 +373,7 @@ function communityVivo() {
             console.log('社区评论true');
             back();
         }
+        console.log('社区阅读第' + (i + 1) + '篇文章');
         back();
     }
 
@@ -386,6 +391,7 @@ function communityVivo() {
     var btn = desc("点击抽奖本次免费").exists();
     if (btn) {
         desc("点击抽奖本次免费").findOne().click();
+        sleep(CONFIG.DELAY._TWO);
     }
 
     console.log("签到完成");
@@ -396,7 +402,7 @@ function communityVivo() {
 /** ==================== 国网 ==================== */
 function getPower() {
     app.launch("com.sgcc.wsgw.cn");
-    sleep(CONFIG.DELAY._THREE);
+    backTime(CONFIG.DELAY._FOUR);
 
     let btn = desc('签到').findOne();
     if (btn) {
@@ -404,17 +410,19 @@ function getPower() {
         let x = bounds.centerX();
         let y = bounds.centerY();
         click(x, y);
+        backTime(CONFIG.DELAY._FOUR);
     }
 
     checkSpecialDate();
 }
 
-/** ==================== 小黑盒 ==================== */
+/** ==================== 微信 ==================== */
 
 function getWx() {
     app.launch("com.tencent.mm")
     text("文件传输助手").findOne().parent().parent().parent().parent().parent().parent().click()
     id('bkg').findOne().click()
+    backTime(CONFIG.DELAY._TWO)
 
 }
 /** ==================== 主函数 ==================== */
@@ -422,47 +430,35 @@ function getWx() {
 
 function main() {
 
-    //1.获取权限
-    getPermission()
+    getPermission() //1.获取权限
 
-    //2.小黑盒
-    startApp(CONFIG.PACKAGES.BLACK_BOX)
+    startApp(CONFIG.PACKAGES.BLACK_BOX) //2.小黑盒
 
-    //3.掌上CF
-    startApp(CONFIG.PACKAGES.CF_SNS)
+    startApp(CONFIG.PACKAGES.CF_SNS) //3.掌上CF
 
-    //4.vivo官网
-    startApp(CONFIG.PACKAGES.VIVO_SPACE, CONFIG.DELAY._THREE)
-    backToHome()
-    //5.清空购物车
-    clearCart()
+    startApp(CONFIG.PACKAGES.VIVO_SPACE, CONFIG.DELAY._THREE) //4.vivo官网
+    
+    backToHome()  //vivo社区返回首页
 
-    //6.加入购物车
-    addCart()
+    clearCart() //5.清空购物车
 
-    //7.社区阅读
-    communityRead()
+    addCart() //6.加入购物车
 
-    //8.会员页
-    vipPage()
+    communityRead() //7.社区阅读
 
-    //9.领积分
-    signIn()
+    vipPage() //8.会员页
 
-    //10.砸金蛋
-    clickEggMain()
+    getIntegral() //9.领积分
 
-    //11.list
-    list()
+    clickEggMain() //10.砸金蛋
 
-    //12.vivo社区
-    communityVivo()
+    list() //11.list
 
-    //13.国网
-    getPower()
+    communityVivo() //12.vivo社区
 
-    //14.微信
-    getWx()
+    getPower() //13.国网
+
+    getWx() //14.微信
 
 
     console.hide()
