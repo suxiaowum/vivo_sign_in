@@ -97,7 +97,7 @@ function getPermission() {
 
 /** ==================== 启动App ==================== */
 function startApp(packageName, sleepTime) {
-    sleepTime = (sleepTime == null) ? CONFIG.DELAY._FOUR : sleepTime;
+    sleepTime = (sleepTime == null) ? 4000 : sleepTime;
     console.log("启动App：" + packageName);
     app.launch(packageName);
 
@@ -227,7 +227,7 @@ function checkSpecialDate() {
 function clearCart() {
     // backToHome()
     id(CONFIG.CART.CART_ID).findOne().click();
-    sleep(CONFIG.DELAY._TWO);
+    sleep(2000);
 
     if (text(CONFIG.CART.CART_NO_TEXT).exists()) {
         back();
@@ -249,20 +249,20 @@ function addCart() {
     // backToHome()
     desc(CONFIG.TABBER.CART_DESC).findOne().click();
     const randomNum = Math.floor(Math.random() * 4);
-    sleep(CONFIG.DELAY._ONE);
+    sleep(1000);
 
     const rect = id("shop_phone_icon").findOnce(randomNum).bounds();
     click(rect.centerX(), rect.centerY());
-    sleep(CONFIG.DELAY._TWO);
+    sleep(2000);
 
     const addCartBtn = text("加入购物车").findOne(2000);
     if (addCartBtn) addCartBtn.click();
-    sleep(CONFIG.DELAY._ONE);
+    sleep(1000);
     const confirmBtn = text("确定").findOne(2000);
     if (confirmBtn) confirmBtn.click();
-    sleep(CONFIG.DELAY._ONE);
+    sleep(1000);
     back();
-    sleep(CONFIG.DELAY._ONE);
+    sleep(1000);
     back();
 
     console.log('加入购物车true');
@@ -272,14 +272,14 @@ function addCart() {
 function communityRead() {
     // backToHome()
     desc(CONFIG.TABBER.READ_DESC).findOne().click();
-    sleep(CONFIG.DELAY._TWO);
+    sleep(2000);
     const communityItems = id(CONFIG.READ.LIST_ID).findOne().children();
     for (let i = 0; i < 4; i++) {
         communityItems[i].click();
-        sleep(CONFIG.DELAY._TWO);
+        sleep(2000);
         back();
         console.log('阅读第' + (i + 1) + '篇文章');
-        sleep(CONFIG.DELAY._ONE);
+        sleep(1000);
 
     }
     console.log('阅读true');
@@ -290,7 +290,7 @@ function communityRead() {
 function vipPage() {
     // backToHome()
     desc(CONFIG.TABBER.VIP_DESC).findOne().click();
-    sleep(CONFIG.DELAY._TWO);
+    sleep(2000);
     back();
     console.log('会员true');
 }
@@ -300,9 +300,9 @@ function vipPage() {
 function getIntegral() {
     // backToHome()
     desc(CONFIG.TABBER.MY_DESC).findOne().click();
-    sleep(CONFIG.DELAY._ONE);
+    sleep(1000);
     id(CONFIG.MY.INTEGRAL_ID).findOne().click();
-    sleep(CONFIG.DELAY._TWO);
+    sleep(2000);
     var btnarr = className(CONFIG.MY.EXPAND_CLASSNAME).find();
     for (var i = 0; i < btnarr.length; i++) {
         if (btnarr[i].text() == "" && btnarr[i].indexInParent() == 2) {
@@ -317,7 +317,7 @@ function getIntegral() {
 /** ==================== 砸金蛋 ==================== */
 function clickEggMain() {
     desc(CONFIG.EGG.EGG_DESC).findOne().click();
-    sleep(CONFIG.DELAY._THREE);
+    sleep(3000);
     clickEgg();
 
 }
@@ -326,9 +326,9 @@ function clickEggMain() {
 
 function list() {
     text(CONFIG.MY.INTEGRAL_SHOP_TEXT).findOne().click();
-    sleep(CONFIG.DELAY._TWO);
+    sleep(2000);
     text(CONFIG.MY.GET_INTEGRAL_TEXT).findOne().click();
-    sleep(CONFIG.DELAY._ONE);
+    sleep(1000);
     let all_text_arr = CONFIG.LIST_NAME;
 
     let get_text_arr = []
@@ -350,48 +350,63 @@ function list() {
 function communityVivo() {
     console.log('社区')
     app.launch("com.vivo.club");
-    backTime(CONFIG.DELAY._FOUR)
+    sleep(4000)
     var arr = id("textPicVideoTotalView").find();
     while (arr.length <= 4) {
+        swipp(500, 1000, 500, 500, 1000);
         console.log("文章数量不足，4s后重新获取");
-        backTime(CONFIG.DELAY._FOUR);
+        sleep(4000);
         arr = id("textPicVideoTotalView").find();
     }
     for (let i = 0; i < 5; i++) {
         // sleep(CONFIG.DELAY._TWO);
         var el = arr[i];
-        arr[i].click();
-        sleep(CONFIG.DELAY._TWO);
-        id("btn_praise").findOne().click();
-        sleep(CONFIG.DELAY._TWO);
-        if (i == 4) {
-            id("tv_reply").findOne().click();
-            sleep(CONFIG.DELAY._TWO);
-            id("edt_reply").findOne().setText("签到");
-            id("btn_send_reply").findOne().click();
-            sleep(CONFIG.DELAY._TWO);
-            console.log('社区评论true');
-            back();
+        el.click();
+        console.log(i);
+        sleep(2000);
+        if (id("btn_praise").exists()) {
+            if (id("btn_praise").findOne().desc().indexOf("已点赞") == -1) {
+                id("btn_praise").findOne().click();
+                sleep(2000);
+            } else {
+                id("btn_praise").findOne().click();
+                sleep(2000);
+                id("btn_praise").findOne().click();
+            }
+
+            if (i == 4) {
+                id("tv_reply").findOne().click();
+                sleep(2000);
+                id("edt_reply").findOne().setText("签到");
+                id("btn_send_reply").findOne().click();
+                sleep(2000);
+                console.log('社区评论true');
+                back();
+            }
+            back()
+            sleep(2000);
         }
         console.log('社区阅读第' + (i + 1) + '篇文章');
-        back();
     }
-
     console.log('社区阅读true');
+
+
+
+    // 签到
     id("mainBottTabVCoinView").findOne().click();
-    sleep(CONFIG.DELAY._TWO);
+    sleep(2000);
 
 
     if (id("everySignDaySignBtn").exists()) {
         id("everySignDaySignBtn").findOne().click();
-        sleep(CONFIG.DELAY._TWO);
+        sleep(2000);
 
     }
-
+    // 抽奖
     var btn = desc("点击抽奖本次免费").exists();
     if (btn) {
         desc("点击抽奖本次免费").findOne().click();
-        sleep(CONFIG.DELAY._TWO);
+        sleep(2000);
     }
 
     console.log("签到完成");
@@ -402,7 +417,7 @@ function communityVivo() {
 /** ==================== 国网 ==================== */
 function getPower() {
     app.launch("com.sgcc.wsgw.cn");
-    backTime(CONFIG.DELAY._FOUR);
+    backTime(4000);
 
     let btn = desc('签到').findOne();
     if (btn) {
@@ -410,7 +425,7 @@ function getPower() {
         let x = bounds.centerX();
         let y = bounds.centerY();
         click(x, y);
-        backTime(CONFIG.DELAY._FOUR);
+        backTime(4000);
     }
 
     checkSpecialDate();
@@ -422,7 +437,7 @@ function getWx() {
     app.launch("com.tencent.mm")
     text("文件传输助手").findOne().parent().parent().parent().parent().parent().parent().click()
     id('bkg').findOne().click()
-    backTime(CONFIG.DELAY._TWO)
+    backTime(2000)
 
 }
 /** ==================== 主函数 ==================== */
@@ -436,7 +451,7 @@ function main() {
 
     startApp(CONFIG.PACKAGES.CF_SNS) //3.掌上CF
 
-    startApp(CONFIG.PACKAGES.VIVO_SPACE, CONFIG.DELAY._THREE) //4.vivo官网
+    startApp(CONFIG.PACKAGES.VIVO_SPACE, 3000) //4.vivo官网
     
     backToHome()  //vivo社区返回首页
 
