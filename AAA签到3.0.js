@@ -22,11 +22,6 @@ const CONFIG = {
         _FOUR: 4000,
     },
 
-    // 应用列表
-    APP_LIST: [
-        '应用商店', '游戏中心', '浏览器', 'vivo视频',
-        '钱包', '主题', '音乐', '小游戏', '快应用', '智慧生活',
-    ],
 
     // 砸金蛋 - 轮播图描述
     CAROUSEL_DESC: '第1张轮播图片，可跳转',
@@ -165,7 +160,7 @@ function getTextIntegral(textArr) {
     let arr = textArr
     for (let i = 0; i < arr.length; i++) {
         let isOk = text(arr[i]).findOne().click();
-        backTime(3000);
+        backTime(5000);
         switch (arr[i]) {
             case '游戏中心':
                 back();
@@ -348,46 +343,54 @@ function list() {
 
 /** ==================== vivo 社区 ==================== */
 function communityVivo() {
+
     console.log('社区')
     app.launch("com.vivo.club");
-    sleep(4000)
-    var arr = id("textPicVideoTotalView").find();
-    while (arr.length <= 4) {
-        swipp(500, 1000, 500, 500, 1000);
-        console.log("文章数量不足，4s后重新获取");
-        sleep(4000);
-        arr = id("textPicVideoTotalView").find();
+    backTime(4000);
+    let tabTrue = desc("未选中标签栏广场").exists();
+    if (tabTrue) {
+        desc("未选中标签栏广场").findOne().click();
     }
+    sleep(2000);
+    let arr = id("thumb_Pic_iv").find()
+    sleep(1000);
     for (let i = 0; i < 5; i++) {
-        // sleep(CONFIG.DELAY._TWO);
-        var el = arr[i];
-        el.click();
-        console.log(i);
-        sleep(2000);
-        if (id("btn_praise").exists()) {
-            if (id("btn_praise").findOne().desc().indexOf("已点赞") == -1) {
-                id("btn_praise").findOne().click();
-                sleep(2000);
-            } else {
-                id("btn_praise").findOne().click();
-                sleep(2000);
-                id("btn_praise").findOne().click();
-            }
 
-            if (i == 4) {
-                id("tv_reply").findOne().click();
-                sleep(2000);
-                id("edt_reply").findOne().setText("签到");
-                id("btn_send_reply").findOne().click();
-                sleep(2000);
-                console.log('社区评论true');
-                back();
-            }
-            back()
+
+        arr[i].parent().click();
+
+        id("btn_praise").waitFor();
+        sleep(2000);
+        if (id("btn_praise").findOne().desc().indexOf("已点赞") == -1) {
+            id("btn_praise").findOne().click();
             sleep(2000);
+        } else {
+            id("btn_praise").findOne().click();
+            sleep(2000);
+            id("btn_praise").findOne().click();
         }
+
+        if (i == 4) {
+            id("tv_reply").findOne().click();
+            sleep(2000);
+            id("edt_reply").findOne().setText("签到");
+            id("btn_send_reply").findOne().click();
+            sleep(2000);
+            console.log('社区评论true');
+        }
+        back()
+        id("thumb_Pic_iv").waitFor();
         console.log('社区阅读第' + (i + 1) + '篇文章');
+        sleep(2000);
+
     }
+
+
+
+
+
+
+
     console.log('社区阅读true');
 
 
@@ -417,7 +420,7 @@ function communityVivo() {
 /** ==================== 国网 ==================== */
 function getPower() {
     app.launch("com.sgcc.wsgw.cn");
-    backTime(4000);
+    backTime(5000);
 
     let btn = desc('签到').findOne();
     if (btn) {
@@ -425,7 +428,7 @@ function getPower() {
         let x = bounds.centerX();
         let y = bounds.centerY();
         click(x, y);
-        backTime(4000);
+        backTime(5000);
     }
 
     checkSpecialDate();
@@ -452,7 +455,7 @@ function main() {
     startApp(CONFIG.PACKAGES.CF_SNS) //3.掌上CF
 
     startApp(CONFIG.PACKAGES.VIVO_SPACE, 3000) //4.vivo官网
-    
+
     backToHome()  //vivo社区返回首页
 
     clearCart() //5.清空购物车
@@ -473,9 +476,10 @@ function main() {
 
     getPower() //13.国网
 
-    getWx() //14.微信
+    // getWx() //14.微信
 
 
     console.hide()
 }
 main()
+
