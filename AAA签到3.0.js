@@ -460,34 +460,34 @@ function quark() {
 function iqoo() {
 
     app.launch(CONFIG.PACKAGES.IQOO);
-    sleepTime(2000);
+    backTime(2000);
     let arr = id('ifbv').find();
     for (let i = 0; i < arr.length; i++) {
         arr[i].parent().click()
         console.log('iqoo阅读第' + (i + 1) + '篇文章');
-        sleepTime(2000);
+        backTime(2000);
         id("btn_praise").findOne().click();
-        sleepTime(2000);
+        backTime(2000);
         id("btn_share").findOne().click();
-        sleepTime(1000);
+        backTime(1000);
         id("ll_copy").findOne().click();
-        sleepTime(1000);
+        backTime(1000);
         if (i == 0) {
             id("tv_reply").findOne().click();
             id("edt_reply").findOne().setText("每日一评")
-            sleepTime(1000);
+            backTime(1000);
             text("发送").findOne().click();
-            sleepTime(2000);
+            backTime(2000);
         }
         back()
-        sleepTime(2000);
+        backTime(2000);
     }
     console.log('iqoo阅读true');
     id("btn_integral").findOne().click();
-    sleepTime(2000);
+    backTime(2000);
     console.log('iqoo签到true');
     id("tv_sign_in").findOne().click();
-    sleepTime(2000);
+    backTime(2000);
     desc("点击抽奖本次免费").findOne().click();
     console.log('iqoo抽奖true');
 
@@ -501,29 +501,29 @@ function main() {
 
     getPermission() //1.获取权限
 
-    startApp(CONFIG.PACKAGES.BLACK_BOX) //2.小黑盒
+    // startApp(CONFIG.PACKAGES.BLACK_BOX) //2.小黑盒
 
-    startApp(CONFIG.PACKAGES.CF_SNS) //3.掌上CF
+    // startApp(CONFIG.PACKAGES.CF_SNS) //3.掌上CF
 
-    startApp(CONFIG.PACKAGES.VIVO_SPACE, 3000) //4.vivo官网
+    // startApp(CONFIG.PACKAGES.VIVO_SPACE, 3000) //4.vivo官网
 
-    backToHome()  //vivo社区返回首页
+    // backToHome()  //vivo社区返回首页
 
-    clearCart() //5.清空购物车
+    // clearCart() //5.清空购物车
 
-    addCart() //6.加入购物车
+    // addCart() //6.加入购物车
 
-    communityRead() //7.社区阅读
+    // communityRead() //7.社区阅读
 
-    vipPage() //8.会员页
+    // vipPage() //8.会员页
 
-    getIntegral() //9.领积分
+    // getIntegral() //9.领积分
 
-    clickEggMain() //10.砸金蛋
+    // clickEggMain() //10.砸金蛋
 
-    list() //11.list
+    // list() //11.list
 
-    communityVivo() //12.vivo社区
+    // communityVivo() //12.vivo社区
 
     getPower() //13.国网
 
