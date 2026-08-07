@@ -12,17 +12,10 @@ const CONFIG = {
         VIVO_SPACE: 'com.vivo.space',
         VIVO_CLUB: 'com.vivo.club',
         POWER: 'com.sgcc.wsgw.cn',
+        WECHAT: 'com.tencent.mm',
+        QUARK: 'com.quark.browser',
+        IQOO: 'com.iqoo.bbs'
     },
-
-    // sleep时间
-    DELAY: {
-        _ONE: 1000,
-        _TWO: 2000,
-        _THREE: 3000,
-        _FOUR: 4000,
-    },
-
-
     // 砸金蛋 - 轮播图描述
     CAROUSEL_DESC: '第1张轮播图片，可跳转',
 
@@ -421,7 +414,7 @@ function communityVivo() {
 function getPower() {
     app.launch("com.sgcc.wsgw.cn");
     backTime(5000);
-
+    desc('签到').waitFor();
     let btn = desc('签到').findOne();
     if (btn) {
         let bounds = btn.bounds();
@@ -437,12 +430,70 @@ function getPower() {
 /** ==================== 微信 ==================== */
 
 function getWx() {
-    app.launch("com.tencent.mm")
+    app.launch(CONFIG.PACKAGES.WECHAT);
     text("文件传输助手").findOne().parent().parent().parent().parent().parent().parent().click()
     id('bkg').findOne().click()
     backTime(2000)
 
 }
+
+
+
+/** ==================== 夸克 ==================== */
+
+function quark() {
+
+    app.launch(CONFIG.PACKAGES.QUARK);
+    backTime(3000)
+    desc('菜单').findOne().click()
+    backTime(2000)
+    click(990, 460)
+    backTime(2000)
+    text('立即领').findOne().click()
+    backTime(2000)
+    click(660, 2130)
+
+}
+
+/** ==================== iqoo社区 ==================== */
+
+function iqoo() {
+
+    app.launch(CONFIG.PACKAGES.IQOO);
+    sleepTime(2000);
+    let arr = id('ifbv').find();
+    for (let i = 0; i < arr.length; i++) {
+        arr[i].parent().click()
+        console.log('iqoo阅读第' + (i + 1) + '篇文章');
+        sleepTime(2000);
+        id("btn_praise").findOne().click();
+        sleepTime(2000);
+        id("btn_share").findOne().click();
+        sleepTime(1000);
+        id("ll_copy").findOne().click();
+        sleepTime(1000);
+        if (i == 0) {
+            id("tv_reply").findOne().click();
+            id("edt_reply").findOne().setText("每日一评")
+            sleepTime(1000);
+            text("发送").findOne().click();
+            sleepTime(2000);
+        }
+        back()
+        sleepTime(2000);
+    }
+    console.log('iqoo阅读true');
+    id("btn_integral").findOne().click();
+    sleepTime(2000);
+    console.log('iqoo签到true');
+    id("tv_sign_in").findOne().click();
+    sleepTime(2000);
+    desc("点击抽奖本次免费").findOne().click();
+    console.log('iqoo抽奖true');
+
+}
+
+
 /** ==================== 主函数 ==================== */
 
 
@@ -478,7 +529,9 @@ function main() {
 
     // getWx() //14.微信
 
+    quark() //15.夸克
 
+    iqoo() //16.iqoo社区
     console.hide()
 }
 main()
