@@ -501,29 +501,29 @@ function main() {
 
     getPermission() //1.获取权限
 
-    // startApp(CONFIG.PACKAGES.BLACK_BOX) //2.小黑盒
+    startApp(CONFIG.PACKAGES.BLACK_BOX) //2.小黑盒
 
-    // startApp(CONFIG.PACKAGES.CF_SNS) //3.掌上CF
+    startApp(CONFIG.PACKAGES.CF_SNS) //3.掌上CF
 
-    // startApp(CONFIG.PACKAGES.VIVO_SPACE, 3000) //4.vivo官网
+    startApp(CONFIG.PACKAGES.VIVO_SPACE, 3000) //4.vivo官网
 
-    // backToHome()  //vivo社区返回首页
+    backToHome()  //vivo社区返回首页
 
-    // clearCart() //5.清空购物车
+    clearCart() //5.清空购物车
 
-    // addCart() //6.加入购物车
+    addCart() //6.加入购物车
 
-    // communityRead() //7.社区阅读
+    communityRead() //7.社区阅读
 
-    // vipPage() //8.会员页
+    vipPage() //8.会员页
 
-    // getIntegral() //9.领积分
+    getIntegral() //9.领积分
 
-    // clickEggMain() //10.砸金蛋
+    clickEggMain() //10.砸金蛋
 
-    // list() //11.list
+    list() //11.list
 
-    // communityVivo() //12.vivo社区
+    communityVivo() //12.vivo社区
 
     getPower() //13.国网
 
