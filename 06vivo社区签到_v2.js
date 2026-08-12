@@ -36,13 +36,10 @@ function communityVivo() {
         desc("未选中标签栏广场").findOne().click();
     }
     sleep(2000);
-    let arr = id("thumb_Pic_iv").find()
+    let arr = id("thread_status_userInfo_view").find()
     sleep(1000);
-    for (let i = 0; i < 5; i++) {
-
-
-        arr[i].parent().click();
-
+    for (let i = 0; i < arr.length; i++) {
+        arr[i].parent().parent().parent().click();
         id("btn_praise").waitFor();
         sleep(2000);
         if (id("btn_praise").findOne().desc().indexOf("已点赞") == -1) {
@@ -66,6 +63,9 @@ function communityVivo() {
         id("thumb_Pic_iv").waitFor();
         console.log('社区阅读第' + (i + 1) + '篇文章');
         sleep(2000);
+        if (i == 5) {
+            break;
+        }
 
     }
 

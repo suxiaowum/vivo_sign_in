@@ -49,8 +49,14 @@ const CONFIG = {
     EGG: {
         EGG_DESC: '第1张轮播图片，可跳转'
     },
-    LIST_NAME: ['应用商店', '游戏中心', '浏览器', "vivo视频", '钱包', '主题', '音乐', '小游戏', '快应用', '智慧生活']
+    LIST_NAME: ['应用商店', '游戏中心', '浏览器', "vivo视频", '钱包', '主题', '音乐', '小游戏', '快应用', '智慧生活'],
 
+    WX: {
+        ONE_X: 486,
+        ONE_Y: 765,
+        TWO_X: 700,
+        TWO_Y: 2000,
+    }
 
 
 };
@@ -336,10 +342,6 @@ function list() {
 
 /** ==================== vivo 社区 ==================== */
 function communityVivo() {
-
-
-
-
     console.log('社区')
     app.launch("com.vivo.club");
     backTime(4000);
@@ -435,9 +437,10 @@ function getPower() {
 
 function getWx() {
     app.launch(CONFIG.PACKAGES.WECHAT);
-    text("文件传输助手").findOne().parent().parent().parent().parent().parent().parent().click()
-    id('bkg').findOne().click()
-    backTime(2000)
+    backTime(1000)
+    click(CONFIG.WX.ONE_X, CONFIG.WX.ONE_Y) //文件传输助手坐标
+    backTime(1000)
+    click(CONFIG.WX.TWO_X, CONFIG.WX.TWO_Y)  //小程序坐标
 
 }
 
