@@ -52,7 +52,7 @@ const CONFIG = {
     LIST_NAME: ['应用商店', '游戏中心', '浏览器', "vivo视频", '钱包', '主题', '音乐', '小游戏', '快应用', '智慧生活'],
 
     WX: {
-        ONE_X: 486,
+        ONE_X: 986,
         ONE_Y: 765,
         TWO_X: 700,
         TWO_Y: 2000,
@@ -245,8 +245,17 @@ function addCart() {
     const randomNum = Math.floor(Math.random() * 4);
     sleep(1000);
 
-    const rect = id("shop_phone_icon").findOnce(randomNum).bounds();
-    click(rect.centerX(), rect.centerY());
+    // const rect = id("shop_phone_icon").findOnce(randomNum).bounds();
+    let arr = id("product_price").find();
+    let rect = null;
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].text() !== "0.01") {
+            rect = arr[i].parent();
+            break;
+        }
+    }
+    rect.click();
+
     sleep(2000);
 
     const addCartBtn = text("加入购物车").findOne(2000);
@@ -268,13 +277,23 @@ function communityRead() {
     desc(CONFIG.TABBER.READ_DESC).findOne().click();
     sleep(2000);
     const communityItems = id(CONFIG.READ.LIST_ID).findOne().children();
-    for (let i = 0; i < 4; i++) {
-        communityItems[i].click();
-        sleep(2000);
-        back();
-        console.log('阅读第' + (i + 1) + '篇文章');
-        sleep(1000);
+    let commNum = 0;
+    for (let i = 0; i < communityItems.length; i++) {
 
+        if (communityItems[i].desc() == null) {
+            log('跳过')
+            continue;
+        } else {
+            communityItems[i].click();
+            backTime(3000);
+            back();
+            commNum++;
+            console.log('阅读第' + commNum + '篇');
+            sleep(1000);
+            if (commNum == 3) {
+                break;
+            }
+        }
     }
     console.log('阅读true');
 
@@ -357,29 +376,29 @@ function communityVivo() {
     for (let i = 0; i < arr.length; i++) {
         arr[i].parent().parent().parent().click();
         id("btn_praise").waitFor();
-        sleep(2000);
+        backTime(2000);
         if (id("btn_praise").findOne().desc().indexOf("已点赞") == -1) {
             id("btn_praise").findOne().click();
-            sleep(2000);
+            backTime(2000);
         } else {
             id("btn_praise").findOne().click();
-            sleep(2000);
+            backTime(2000);
             id("btn_praise").findOne().click();
         }
 
         if (i == 4) {
             id("tv_reply").findOne().click();
-            sleep(2000);
+            backTime(2000);
             id("edt_reply").findOne().setText("签到");
             id("btn_send_reply").findOne().click();
-            sleep(2000);
+            backTime(2000);
             console.log('社区评论true');
         }
         back()
         id("thumb_Pic_iv").waitFor();
         console.log('社区阅读第' + (i + 1) + '篇文章');
-        sleep(2000);
-        if (i == 5) {
+        backTime(2000);
+        if (i == 4) {
             break;
         }
     }
@@ -420,6 +439,12 @@ function communityVivo() {
 function getPower() {
     app.launch("com.sgcc.wsgw.cn");
     backTime(5000);
+    if (text("今日不再出现").exists()) {
+        let bounds = desc("关闭").findOne().bounds()
+        let centerX = bounds.centerX();
+        let centerY = bounds.centerY();
+        click(centerX, centerY);
+    }
     desc('签到').waitFor();
     let btn = desc('签到').findOne();
     if (btn) {
@@ -437,9 +462,9 @@ function getPower() {
 
 function getWx() {
     app.launch(CONFIG.PACKAGES.WECHAT);
-    backTime(1000)
+    backTime(3000)
     click(CONFIG.WX.ONE_X, CONFIG.WX.ONE_Y) //文件传输助手坐标
-    backTime(1000)
+    backTime(3000)
     click(CONFIG.WX.TWO_X, CONFIG.WX.TWO_Y)  //小程序坐标
 
 }
@@ -459,6 +484,8 @@ function quark() {
     text('立即领').findOne().click()
     backTime(2000)
     click(660, 2130)
+    backTime(2000)
+
 
 }
 
@@ -537,7 +564,7 @@ function main() {
 
     getPower() //13.国网
 
-    // getWx() //14.微信
+    getWx() //14.微信
 
     quark() //15.夸克
 

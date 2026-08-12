@@ -34,12 +34,26 @@ desc('社区').findOne().click();
 sleep(1500);
 
 const communityItems = id("rv").findOne().children();
-for (let i = 0; i < 3; i++) {
-    communityItems[i].click();
-    sleep(2000);
-    back();
-    sleep(1000);
+
+let commNum = 0;
+for (let i = 0; i < communityItems.length; i++) {
+
+    if (communityItems[i].desc() == null) {
+        log('跳过')
+        continue;
+    } else {
+        communityItems[i].click();
+        sleep(3000);
+        back();
+        commNum++;
+        console.log('阅读第' + commNum + '篇');
+        sleep(1000);
+        if (commNum == 3) {
+            break;
+        }
+    }
 }
+
 console.log('阅读true');
 
 exit();

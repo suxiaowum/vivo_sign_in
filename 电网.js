@@ -5,7 +5,12 @@
 
 app.launch("com.sgcc.wsgw.cn");
 sleep(3000);
-
+if (text("今日不再出现").exists()) {
+    let bounds = desc("关闭").findOne().bounds()
+    let centerX = bounds.centerX();
+    let centerY = bounds.centerY();
+    click(centerX, centerY);
+}
 let btn = desc('签到').findOne();
 if (btn) {
     let bounds = btn.bounds();
@@ -29,6 +34,6 @@ function checkSpecialDate() {
         toast(
             '今天是' + day + '号，记得抽奖！'
         );
-       
+
     }
 }

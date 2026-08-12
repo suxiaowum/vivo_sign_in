@@ -21,19 +21,35 @@ if (text("暂无商品").exists()) {
 /**
  * 加入购物车
  * */
+// 
+desc("选购").findOne().click();
 
-desc('选购').click()
-let randomNum = Math.floor(Math.random() * 4);
-sleep(1000)
-var rect = id("shop_phone_icon").findOnce(randomNum).bounds()
-console.log(rect)
-click(rect.centerX(), rect.centerY())
-sleep(2000)
-text("加入购物车").findOne(2000).click()
-text("确定").findOne(2000).click()
-back()
-back()
+sleep(1000);
 
+// const rect = id("shop_phone_icon").findOnce(randomNum).bounds();
+let arr = id("product_price").find();
+let rect = null;
+for (let i = 0; i < arr.length; i++) {
+    if (arr[i].text() !== "0.01") {
+        rect = arr[i].parent();
+        break;
+    }
+}
+rect.click();
+
+sleep(2000);
+
+const addCartBtn = text("加入购物车").findOne(2000);
+if (addCartBtn) addCartBtn.click();
+sleep(1000);
+const confirmBtn = text("确定").findOne(2000);
+if (confirmBtn) confirmBtn.click();
+sleep(1000);
+back();
+sleep(1000);
+back();
+
+console.log('加入购物车true');
 
 
 // bounds(316, 1096, 1203, 1414).click()
