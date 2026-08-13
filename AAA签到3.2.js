@@ -439,7 +439,7 @@ function communityVivo() {
 function getPower() {
     app.launch("com.sgcc.wsgw.cn");
     backTime(5000);
-    if (text("今日不再出现").exists()) {
+    if (desc("关闭").exists()) {
         let bounds = desc("关闭").findOne().bounds()
         let centerX = bounds.centerX();
         let centerY = bounds.centerY();
