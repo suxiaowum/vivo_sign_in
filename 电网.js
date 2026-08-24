@@ -5,7 +5,9 @@
 
 app.launch("com.sgcc.wsgw.cn");
 sleep(3000);
-if (text("今日不再出现").exists()) {
+let closeBtn = desc("关闭").findOne(5000);
+log(closeBtn)
+if (closeBtn) {
     let bounds = desc("关闭").findOne().bounds()
     let centerX = bounds.centerX();
     let centerY = bounds.centerY();

@@ -177,6 +177,20 @@ function getTextIntegral(textArr) {
                 back();
                 console.log(arr[i] + isOk);
                 break;
+            case '钱包':
+
+                back()
+                sleep(1000)
+                desc("省钱").findOne().click()
+                sleep(2000)
+                if (text("签到").exists()) {
+                    text("签到").findOne().click()
+                    sleep(1000)
+                }
+                app.launch('com.vivo.space');
+                console.log(arr[i] + isOk)
+                break;
+
             case '小游戏':
                 if (id("btn_sign_in").exists()) {
                     id("btn_sign_in").findOne().click();
@@ -439,7 +453,9 @@ function communityVivo() {
 function getPower() {
     app.launch("com.sgcc.wsgw.cn");
     backTime(5000);
-    if (desc("关闭").exists()) {
+    let closeBtn = desc("关闭").findOne(5000);
+
+    if (closeBtn) {
         let bounds = desc("关闭").findOne().bounds()
         let centerX = bounds.centerX();
         let centerY = bounds.centerY();
@@ -466,6 +482,7 @@ function getWx() {
     click(CONFIG.WX.ONE_X, CONFIG.WX.ONE_Y) //文件传输助手坐标
     backTime(3000)
     click(CONFIG.WX.TWO_X, CONFIG.WX.TWO_Y)  //小程序坐标
+    backTime(3000)
 
 }
 
@@ -564,7 +581,7 @@ function main() {
 
     getPower() //13.国网
 
-    getWx() //14.微信
+    //getWx() //14.微信
 
     quark() //15.夸克
 
