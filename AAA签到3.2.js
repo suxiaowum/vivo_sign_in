@@ -179,14 +179,14 @@ function getTextIntegral(textArr) {
                 break;
             case '钱包':
 
-                back()
+                // back()
+                // sleep(1000)
+                // desc("省钱").findOne().click()
                 sleep(1000)
-                desc("省钱").findOne().click()
-                sleep(2000)
-                if (text("签到").exists()) {
-                    text("签到").findOne().click()
-                    sleep(1000)
-                }
+                // if (text("签到").exists()) {
+                //     text("签到").findOne().click()
+                //     sleep(1000)
+                // }
                 app.launch('com.vivo.space');
                 console.log(arr[i] + isOk)
                 break;
@@ -263,7 +263,7 @@ function addCart() {
     let arr = id("product_price").find();
     let rect = null;
     for (let i = 0; i < arr.length; i++) {
-        if (arr[i].text() !== "0.01") {
+        if (arr[i].text() !== "0.01" && arr[i].text() !== "9.9" && arr[i].text() !== "0.1") {
             rect = arr[i].parent();
             break;
         }
@@ -275,7 +275,7 @@ function addCart() {
     const addCartBtn = text("加入购物车").findOne(2000);
     if (addCartBtn) addCartBtn.click();
     sleep(1000);
-    const confirmBtn = text("确定").findOne(2000);
+    const confirmBtn = desc("确定").findOne(2000);
     if (confirmBtn) confirmBtn.click();
     sleep(1000);
     back();
@@ -375,51 +375,79 @@ function list() {
 
 /** ==================== vivo 社区 ==================== */
 function communityVivo() {
+
     console.log('社区')
     app.launch("com.vivo.club");
-    backTime(4000);
-    let tabTrue = desc("已选中标签栏广场").exists();
-    console.log(tabTrue);
-    if (!tabTrue) {
+    sleep(4000);
+    let tabTrue = desc("未选中标签栏广场").exists();
+    if (tabTrue) {
         desc("未选中标签栏广场").findOne().click();
     }
-    backTime(2000);
+    sleep(2000);
     let arr = id("thread_status_userInfo_view").find()
-
     sleep(1000);
     for (let i = 0; i < arr.length; i++) {
         arr[i].parent().parent().parent().click();
-        id("btn_praise").waitFor();
-        backTime(2000);
-        if (id("btn_praise").findOne().desc().indexOf("已点赞") == -1) {
-            id("btn_praise").findOne().click();
-            backTime(2000);
+        // 等待点赞按钮出现，兼容普通帖(btn_praise)与视频帖(thread_video_ZanView)
+        let praiseId = null;
+        let deadline = Date.now() + 8000; // 最多等 8 秒
+        while (Date.now() < deadline) {
+            if (id("btn_praise").exists()) { praiseId = "btn_praise"; break; }
+            if (id("thread_video_ZanView").exists()) { praiseId = "thread_video_ZanView"; break; }
+            sleep(500);
+        }
+        if (!praiseId) {
+            console.log('未找到点赞按钮，跳过第' + (i + 1) + '篇');
+            back();
+            id("thumb_Pic_iv").waitFor();
+            continue;
+        }
+        sleep(2000);
+        if (praiseId == "thread_video_ZanView") {
+            // 视频帖：不判断点赞状态，直接点一次
+            id(praiseId).findOne().click();
+            sleep(2000);
         } else {
-            id("btn_praise").findOne().click();
-            backTime(2000);
-            id("btn_praise").findOne().click();
+            // 普通帖：按 desc 判断是否已赞，保证结束态为已赞
+            if (id(praiseId).findOne().desc().indexOf("已点赞") == -1) {
+                id(praiseId).findOne().click();
+                sleep(2000);
+            } else {
+                id(praiseId).findOne().click();
+                sleep(2000);
+                id(praiseId).findOne().click();
+            }
         }
 
         if (i == 4) {
             id("tv_reply").findOne().click();
-            backTime(2000);
-            id("edt_reply").findOne().setText("签到");
-            id("btn_send_reply").findOne().click();
-            backTime(2000);
-            console.log('社区评论true');
+            sleep(2000);
+            // 评论输入框：普通帖 edt_reply / 视频帖 thread_video_Pl_inputTv
+            let replyId = null;
+            let replyDeadline = Date.now() + 8000;
+            while (Date.now() < replyDeadline) {
+                if (id("edt_reply").exists()) { replyId = "edt_reply"; break; }
+                if (id("thread_video_Pl_inputTv").exists()) { replyId = "thread_video_Pl_inputTv"; break; }
+                sleep(500);
+            }
+            if (replyId) {
+                id(replyId).findOne().setText("签到");
+                id("btn_send_reply").findOne().click();
+                sleep(2000);
+                console.log('社区评论true');
+            } else {
+                console.log('未找到评论输入框，跳过评论');
+            }
         }
         back()
         id("thumb_Pic_iv").waitFor();
         console.log('社区阅读第' + (i + 1) + '篇文章');
-        backTime(2000);
-        if (i == 4) {
+        sleep(2000);
+        if (i == 5) {
             break;
         }
+
     }
-
-
-
-
 
 
 
@@ -583,7 +611,7 @@ function main() {
 
     //getWx() //14.微信
 
-    quark() //15.夸克
+    // quark() //15.夸克
 
     iqoo() //16.iqoo社区
     console.hide()

@@ -40,24 +40,56 @@ function communityVivo() {
     sleep(1000);
     for (let i = 0; i < arr.length; i++) {
         arr[i].parent().parent().parent().click();
-        id("btn_praise").waitFor();
+        // 等待点赞按钮出现，兼容普通帖(btn_praise)与视频帖(thread_video_ZanView)
+        let praiseId = null;
+        let deadline = Date.now() + 8000; // 最多等 8 秒
+        while (Date.now() < deadline) {
+            if (id("btn_praise").exists()) { praiseId = "btn_praise"; break; }
+            if (id("thread_video_ZanView").exists()) { praiseId = "thread_video_ZanView"; break; }
+            sleep(500);
+        }
+        if (!praiseId) {
+            console.log('未找到点赞按钮，跳过第' + (i + 1) + '篇');
+            back();
+            id("thumb_Pic_iv").waitFor();
+            continue;
+        }
         sleep(2000);
-        if (id("btn_praise").findOne().desc().indexOf("已点赞") == -1) {
-            id("btn_praise").findOne().click();
+        if (praiseId == "thread_video_ZanView") {
+            // 视频帖：不判断点赞状态，直接点一次
+            id(praiseId).findOne().click();
             sleep(2000);
         } else {
-            id("btn_praise").findOne().click();
-            sleep(2000);
-            id("btn_praise").findOne().click();
+            // 普通帖：按 desc 判断是否已赞，保证结束态为已赞
+            if (id(praiseId).findOne().desc().indexOf("已点赞") == -1) {
+                id(praiseId).findOne().click();
+                sleep(2000);
+            } else {
+                id(praiseId).findOne().click();
+                sleep(2000);
+                id(praiseId).findOne().click();
+            }
         }
 
         if (i == 4) {
             id("tv_reply").findOne().click();
             sleep(2000);
-            id("edt_reply").findOne().setText("签到");
-            id("btn_send_reply").findOne().click();
-            sleep(2000);
-            console.log('社区评论true');
+            // 评论输入框：普通帖 edt_reply / 视频帖 thread_video_Pl_inputTv
+            let replyId = null;
+            let replyDeadline = Date.now() + 8000;
+            while (Date.now() < replyDeadline) {
+                if (id("edt_reply").exists()) { replyId = "edt_reply"; break; }
+                if (id("thread_video_Pl_inputTv").exists()) { replyId = "thread_video_Pl_inputTv"; break; }
+                sleep(500);
+            }
+            if (replyId) {
+                id(replyId).findOne().setText("签到");
+                id("btn_send_reply").findOne().click();
+                sleep(2000);
+                console.log('社区评论true');
+            } else {
+                console.log('未找到评论输入框，跳过评论');
+            }
         }
         back()
         id("thumb_Pic_iv").waitFor();
@@ -68,11 +100,6 @@ function communityVivo() {
         }
 
     }
-
-
-
-
-
 
 
     console.log('社区阅读true');
