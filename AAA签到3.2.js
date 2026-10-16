@@ -47,7 +47,7 @@ const CONFIG = {
         EXPAND_CLASSNAME: 'android.widget.Button',
     },
     EGG: {
-        EGG_DESC: '第1张轮播图片，可跳转'
+        EGG_DESC: '第2张轮播图片，可跳转'  //活动结束后改为‘第1张轮播图片，可跳转’
     },
     LIST_NAME: ['应用商店', '游戏中心', '浏览器', "vivo视频", '钱包', '主题', '音乐', '小游戏', '快应用', '智慧生活'],
 
@@ -420,18 +420,24 @@ function communityVivo() {
         }
 
         if (i == 4) {
-            id("tv_reply").findOne().click();
+            // 打开评论输入框（输入框都要先点击才出现）：
+            //   普通帖 tv_reply / 视频帖 thread_video_sendMsg_View
+            if (id("tv_reply").exists()) {
+                id("tv_reply").findOne().click();
+            } else if (id("thread_video_sendMsg_View").exists()) {
+                id("thread_video_sendMsg_View").findOne().click();
+            } else {
+                console.log('未找到评论入口，跳过评论');
+            }
             sleep(2000);
-            // 评论输入框：普通帖 edt_reply / 视频帖 thread_video_Pl_inputTv
-            let replyId = null;
+            // 输入框：普通帖/视频帖均为 edt_reply
             let replyDeadline = Date.now() + 8000;
-            while (Date.now() < replyDeadline) {
-                if (id("edt_reply").exists()) { replyId = "edt_reply"; break; }
-                if (id("thread_video_Pl_inputTv").exists()) { replyId = "thread_video_Pl_inputTv"; break; }
+            while (Date.now() < replyDeadline && !id("edt_reply").exists()) {
                 sleep(500);
             }
-            if (replyId) {
-                id(replyId).findOne().setText("签到");
+            if (id("edt_reply").exists()) {
+                id("edt_reply").findOne().setText("签到");
+                // 发送：普通帖/视频帖均为 btn_send_reply
                 id("btn_send_reply").findOne().click();
                 sleep(2000);
                 console.log('社区评论true');

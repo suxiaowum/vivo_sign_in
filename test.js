@@ -32,12 +32,13 @@
 
 
 
-let arr = id("product_price").find();
-let rect = null;
-for (let i = 0; i < arr.length; i++) {
-    if(arr[i].text() !== "0.01"){
-        rect = arr[i].parent();
-        break;
-    }
-}
-rect.click();
+// let arr = id("product_price").find();
+// let rect = null;
+// for (let i = 0; i < arr.length; i++) {
+//     if(arr[i].text() !== "0.01"){
+//         rect = arr[i].parent();
+//         break;
+//     }
+// }
+// rect.click();
+

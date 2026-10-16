@@ -1,0 +1,3 @@
+# 统一工作区换行符为 CRLF（Windows + autocrlf 场景）
+# text=auto：让 Git 按文本自动归一化；eol=crlf：检出到工作区时用 CRLF
+* text=auto eol=crlf
